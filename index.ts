@@ -36,7 +36,19 @@ async function parseComponent(comp) {
 
     if (!components.length) return comp
 
-    const subComps = await Promise.all(_.map(components, comp => parseComponent(comp)))
+    const subComps = await Promise.all(
+      _(components)
+        .filter(subComp => subComp.name !== comp.name)
+        .map(comp => parseComponent(comp))
+        .value()
+    )
+
+    const recursiveComps = _(components)
+      .filter(subComp => subComp.name === comp.name)
+      .map(comp => ({ ...comp, name: comp.name + ' – RECURSIVE' }))
+      .value()
+
+    const allSubComps = [...subComps, ...recursiveComps]
 
     return {
       name: comp.name,
