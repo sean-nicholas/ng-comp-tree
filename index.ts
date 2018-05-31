@@ -2,6 +2,7 @@ import * as glob from 'glob'
 import { readFile } from 'fs'
 import * as _ from 'lodash'
 import { paramCase, pascalCase } from 'change-case'
+import { parse } from 'path'
 
 const tree = []
 
@@ -60,6 +61,7 @@ async function parseComponent(comp) {
 }
 
 async function parseRouting(file) {
+  const moduleName = pascalCase(parse(file).name.replace('.module', ''))
   const data = await readFilePromise(file)
   const contents = data.toString()
 
@@ -72,10 +74,12 @@ async function parseRouting(file) {
     .map(comp => ({ ...comp, filename: getComponentFilename(comp) }))
     .value()
 
-  for (const comp of components) {
-    const parsed = await parseComponent(comp)
-    tree.push(parsed)
-  }
+  const subComponents = await Promise.all(_.map(components, comp => parseComponent(comp)))
+
+  tree.push({
+    name: moduleName,
+    subComponents
+  })
 }
 
 function displayTree(node, depth = 0) {
@@ -88,6 +92,6 @@ glob(`${src}/**/*routing.module.ts`, (err, matches) => {
   if (err) return console.log(err)
 
   Promise.all(_.map(matches, file => parseRouting(file)))
-    // .then(() => console.log('tree', tree[tree.length - 1]))
+    // .then(() => console.log('tree', tree))
     .then(() => displayTree(tree))
 })
