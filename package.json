@@ -1,0 +1,24 @@
+{
+  "name": "ng-comp-tree",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/glob": "^5.0.35",
+    "@types/lodash": "^4.14.109",
+    "ts-node": "^6.0.5",
+    "typescript": "^2.8.4"
+  },
+  "dependencies": {
+    "change-case": "^3.0.2",
+    "glob": "^7.1.2",
+    "lodash": "^4.17.10"
+  }
+}
