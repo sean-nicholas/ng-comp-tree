@@ -52,7 +52,7 @@ async function parseComponent(comp) {
 
     return {
       name: comp.name,
-      subComponents: Array.isArray(subComps) ? subComps : [subComps]
+      subComponents: Array.isArray(allSubComps) ? allSubComps : [allSubComps]
     }
   } catch (e) {
     return comp
